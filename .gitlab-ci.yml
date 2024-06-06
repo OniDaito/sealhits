@@ -1,0 +1,42 @@
+image: "python:3.11"
+
+before_script:
+  - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
+  - which git-lfs || ( apt-get update -y && apt-get install git-lfs -y )
+  - eval $(ssh-agent -s)
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa_gitlab
+  - chmod 400 ~/.ssh/id_rsa_gitlab
+  - ssh-add ~/.ssh/id_rsa_gitlab
+  - touch ~/.ssh/known_hosts
+  - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+  - git submodule update --init --recursive
+  - git config --global url."git@gitlab.st-andrews.ac.uk:".insteadOf "https://gitlab.st-andrews.ac.uk"
+  - git clone git@gitlab.st-andrews.ac.uk:biology/smru/bjb8/pypam.git
+  - python --version
+  - pip3 install ./pypam
+  - rm -rf pypam
+  - pip3 install -r requirements.txt
+  - pip3 install ruff
+  - pip3 install pytest
+
+stages:
+  - Static Analysis
+  - Test
+
+ruff:
+  tags:
+    - sealcops
+  stage: Static Analysis
+  script:
+  - ruff check 
+
+unit_test:
+  tags:
+    - sealcops
+    - test
+  stage: Test
+  script:
+  - pwd
+  - pytest -m "not integtest"

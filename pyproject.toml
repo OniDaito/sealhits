@@ -1,0 +1,66 @@
+[project]
+name = "sealhits"
+description = "A set of python programs and functions for dealing with the Seal Data"
+version = "0.1.0"
+authors = [
+    { name = "Benjamin James Blundell", email = "bjb8@st-andrews.ac.uk" }
+]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
+
+dependencies = [
+    "astropy",
+    "ffmpegio",
+    "ffmpegio_core",
+    "GitPython",
+    "human_id",
+    "lz4",
+    "matplotlib",
+    "numba",
+    "numpy",
+    "palettable",
+    "pandas",
+    "Pillow",
+    "psycopg2",
+    "pyreadr",
+    "pytz",
+    "scipy",
+    "scikit-image",
+    "SQLAlchemy",
+    "tqdm",
+    "pytest"
+]
+
+[project.optional-dependencies]
+dev = [
+    "tox",
+    "pre-commit",
+    "bump2version",
+    "mkdocs"
+]
+
+test = [
+    "pytest"
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
+
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core >=3.2,<4"]
+
+[project.urls]
+"Homepage" = "https://github.com/pypa/sampleproject"
+"Bug Tracker" = "https://github.com/pypa/sampleproject/issues"

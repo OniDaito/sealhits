@@ -1,0 +1,21 @@
+site_name: SealHits
+
+theme:
+  name: "readthedocs"
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_docstring_modules: false
+
+nav:
+  - index.md
+  - tutorials.md
+  - how-to-guides.md
+  - reference.md
+  - explanation.md
+  - database.md

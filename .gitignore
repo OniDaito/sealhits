@@ -1,0 +1,10 @@
+__pycache__
+*.pyc
+results/*.fits
+*.npz
+*.pickle
+*.Rdata
+.pytest_cache
+.ruff_cache
+.vscode
+venv
