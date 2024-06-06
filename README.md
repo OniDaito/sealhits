@@ -83,6 +83,8 @@ The tests assume you have a working PosgreSQL on the test machine. This will nee
 
 ## Docs
 
+Full documentation including the API reference and database schema are available at [https://OniDaito.github.io/sealhits/](https://OniDaito.github.io/sealhits/).
+
 Documentation is built using the program [mkdocs](https://www.mkdocs.org/). It should be installed as part of the python requirements. The following commands are handy:
 
 * `mkdocs serve` - Start the live-reloading docs server.
