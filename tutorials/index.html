@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Tutorials - SealHits</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Tutorials";
+        var mkdocs_page_input_path = "tutorials.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> SealHits
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">SealHits</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Tutorials</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#ingesting-data">Ingesting data</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#generating-a-dataset">Generating a dataset</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../how-to-guides/">How-to guides</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../reference/">Reference and API</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../explanation/">Explanation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../database/">The Sealhits Database</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">SealHits</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Tutorials</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="tutorials">Tutorials</h1>
+<p>The following tutorial will show you how to go from the base datafiles to a final dataset that can be used with <a href="https://gitlab.st-andrews.ac.uk/biology/smru/bjb8/classyseal">ClassySeal</a>.</p>
+<h2 id="ingesting-data">Ingesting data</h2>
+<p>The first thing to do is to ingest the data using the ingest.py script. There are three sources of data required:</p>
+<ol>
+<li>The PAMGuard derived SQLITE database file. This contains the metadata and the group annotations</li>
+<li>A directory of PGDF files. These binary files are also taken from PAMGuard</li>
+<li>A directory of GLF files. These hold the Tritech Sonar images and can be quite large. We will generate FITS images from these.</li>
+</ol>
+<p>The ingest command can be executed as follows:</p>
+<pre><code>python ingest.py -s /path/to/sqlite3.file -g /path/to/glf/dir -p /path/to/pgdf/dir -b 4 -o /path/to/output/fits/dir -d &lt;database_name&gt;
+</code></pre>
+<p>The '-b' switch specifies the length of the buffer in seconds. This amount of images will be appended and prepended to the group. For more information on the various switches type:</p>
+<pre><code>python ingest.py -h
+</code></pre>
+<p>This command can take up to several days to complete depending on the number and size of the various groups. Multiple ingest commands can be run at once. Depending on the disks, network speed or other restrictions, you may or may not be able to run a large number of ingests at once.</p>
+<h2 id="generating-a-dataset">Generating a dataset</h2>
+<p>Once the ingest is complete, you can generate a dataset. Let's generate an Rdata dataset. This consists of a number of images, each a crop of the original sonar image and the metadata for each crop.</p>
+<pre><code>python tordata.py -o /path/to/output/dir -c /path/to/cache -i /path/to/fits/dir -e -d &lt;database name&gt;
+</code></pre>
+<p>The cache directory saves the fan distorted images for use later and is optional. The '-e' switch interpolates and cleans the original track.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="SealHits"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../how-to-guides/" class="btn btn-neutral float-right" title="How-to guides">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../how-to-guides/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

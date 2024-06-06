@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>How-to guides - SealHits</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "How-to guides";
+        var mkdocs_page_input_path = "how-to-guides.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> SealHits
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">SealHits</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../tutorials/">Tutorials</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">How-to guides</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#bring-data-from-pamguard-and-tritech-into-the-database">Bring data from PAMGuard and Tritech into the database</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#process-glfs-on-their-own">Process GLFs on their own</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#verify-the-data-is-correct">Verify the data is correct</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#generate-videos-from-the-data">Generate Videos from the data</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#sql-queries">SQL queries</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#get-all-the-images-for-a-group">Get all the images for a group</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-all-the-points-in-a-group">Get all the points in a group</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../reference/">Reference and API</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../explanation/">Explanation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../database/">The Sealhits Database</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">SealHits</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">How-to guides</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="how-to-guides">How-to guides</h1>
+<p>The following are a number of short guides on how perform some of the key processes in sealhits.</p>
+<h2 id="bring-data-from-pamguard-and-tritech-into-the-database">Bring data from PAMGuard and Tritech into the database</h2>
+<p>The ingest program requires a database be available (in this case, a postgresql database called sealhits, with the sealhits user). The following parameters are required:</p>
+<ul>
+<li>-s - The path to the sqlite3 file we are importing from.</li>
+<li>-g - The path to where the GLFs live.</li>
+<li>-p - The path to the PGDFs.</li>
+<li>-b - The buffer size in seconds.</li>
+<li>-o - The output directory for the FITS image files.</li>
+<li>-d - The database name.</li>
+</ul>
+<p>Ingest will look at the groups, tracks and pgdfs in the sqlite file. It will then find out which are the new groups (that don't already exist in the database) and will add the new ones. The PGDFs and GLFS do not need to be organised or grouped to match - ingest will search all GLFs and PGDFs available and find the ones that match the groups from the sqlite.</p>
+<pre><code>python ingest.py -s /mnt/spinning0/sealhits/sqlites/MeygenTritechDetectHDD_12Binary_GH_221220.sqlite3 -g /mnt/smru-sonar -p /mnt/spinning0/sealhits/pgdfs -b 4 -o /mnt/spinning0/sealhits/fits -d sealhits
+</code></pre>
+<p>The resulting output will be a populated database with the associated FITS files, compressed with LZ4 compression. From here, other programs such as video.py.</p>
+<h2 id="process-glfs-on-their-own">Process GLFs on their own</h2>
+<p>If you passed the '-v' option to ingest.py, you will have skipped processing the GLF files. This can be useful if you just need the data from the PGDFs and the sqlite databases. Sometimes, GLF ingests will fail for various reasons and may need running again. If you have read in the databases correctly and just need to re-ingest the GLF files, you can do so with the following command:</p>
+<pre><code>python ingest_glfs_hdd.py -i /path/to/glfs -d sealhits -a oursqlitefile.sqlite3 -o /output/folder/for/images
+</code></pre>
+<p>This command will look in the GLFs folder and extract the matching images against the datbase, spitting out fits files into the output directory. This program works on a per sqlite3/hard-disk capacity. Any groups with a matching 'sqlite' column will be checked.</p>
+<p>Ingesting GLFs is the most time consuming operation of the entire ingest process by quite some way.</p>
+<h2 id="verify-the-data-is-correct">Verify the data is correct</h2>
+<p><em>to-do</em></p>
+<h2 id="generate-videos-from-the-data">Generate Videos from the data</h2>
+<p>It's useful to see what the data look like in the form of a video.</p>
+<pre><code>python video.py -o ~/tmp -d testseals -u testseals -w testseals -y 1200 -i ../sealhits_testdata/fits -c ~/tmp/cache -b b51d4e92-7259-4fc2-b13e-83878763fccf
+</code></pre>
+<p>This command will generate a video of the group 'b51d4e92-7259-4fc2-b13e-83878763fccf', from the database 'testseals'. The following parameters are:</p>
+<ul>
+<li>-o - The output directory for the video.</li>
+<li>-d - The database name.</li>
+<li>-u - The username for the database.</li>
+<li>-w - The password for the database.</li>
+<li>-y - The height of the final video.</li>
+<li>-i - The path to the fits files.</li>
+<li>-c - The path to the cache of fan images (if it exists).</li>
+<li>-b - Draw the bounding boxes for this track.</li>
+</ul>
+<h2 id="sql-queries">SQL queries</h2>
+<p>Some SQL queries that can be performed on the database.</p>
+<h3 id="get-all-the-images-for-a-group">Get all the images for a group</h3>
+<pre><code>select * from images ig
+inner join groups_images gi
+on gi.image_id = ig.uid
+inner join groups gg
+on gg.uid = gi.group_id
+where gg.uid = '16010b86-8c0e-4ec0-93b3-00414842286d';
+</code></pre>
+<h3 id="get-all-the-points-in-a-group">Get all the points in a group</h3>
+<p>These points are associated with a group post splitting.</p>
+<pre><code>select * from points ps
+inner join groups gg
+on gg.uid = ps.group_id
+where gg.uid = '16010b86-8c0e-4ec0-93b3-00414842286d';
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../tutorials/" class="btn btn-neutral float-left" title="Tutorials"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../reference/" class="btn btn-neutral float-right" title="Reference and API">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../tutorials/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../reference/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

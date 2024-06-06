@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>The Sealhits Database - SealHits</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "The Sealhits Database";
+        var mkdocs_page_input_path = "database.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> SealHits
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">SealHits</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../tutorials/">Tutorials</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../how-to-guides/">How-to guides</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../reference/">Reference and API</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../explanation/">Explanation</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">The Sealhits Database</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#schemas">Schemas</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#glfs">glfs</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#groups">groups</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#images">images</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pgdfs">pgdfs</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#points">points</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#tracks_groups">tracks_groups</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">SealHits</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">The Sealhits Database</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="the-sealhits-database">The Sealhits Database</h1>
+<p>The major component of the sealhits program is the postgresql database at it's heart. This database is used to house all the required information to produce the tracks and images recorded by SMRU. It derives it's data from the SQLITE files exported by PAMGuard, the PGDF files from PAMGuard and the Tritech Gemini GLF files.</p>
+<h2 id="overview">Overview</h2>
+<p>There are a total of 5 main tables and 4 support tables in the database. These are:</p>
+<ul>
+<li>glfs - a list of all the glf files considered.</li>
+<li>groups - the groups formed of tracks and annotations. The main table.</li>
+<li>images - a list of all the images extracted from the GLF files.</li>
+<li>pgdfs - a list of all the pgdfs considered.</li>
+<li>points - a list of all the points required to recreate the tracks.</li>
+<li>tracks_groups - a list of all the tracks, their details and which group they belong to.</li>
+</ul>
+<p>In addition, the following minor tables are used to form relationships</p>
+<ul>
+<li>groups_glfs - which glfs are needed for which group.</li>
+<li>groups_images - which images belong to which groups.</li>
+<li>groups_pgdfs - which pgdfs correspond to which groups.</li>
+<li>_diesel_schema_migrations - a table for the rust library diesel.</li>
+</ul>
+<p><img alt="sealhits_DB" src="../sealhits_DB.png" /></p>
+<p>An annotated group and its associated points and images are the three main table to be considered. See the <a href="../how-to-guides/">How to Guides</a> for examples of how to setup a postgresql query to select points and images for a particular group.</p>
+<h2 id="schemas">Schemas</h2>
+<p>The following is the SQL for each table and what the columns represent.</p>
+<p>Throughout, the uid field is a unique key. Furthermore, each table has a unique composite key used to prevent accidental duplication. This allows for re-ingesting files without fear of duplicating data.</p>
+<h3 id="glfs">glfs</h3>
+<pre><code>ALTER TABLE public.glfs ADD filename varchar NOT NULL;
+ALTER TABLE public.glfs ADD startdate timestamptz NOT NULL;
+ALTER TABLE public.glfs ADD enddate timestamptz NOT NULL;
+ALTER TABLE public.glfs ADD uid bigserial NOT NULL;
+</code></pre>
+<ul>
+<li>filename - the filename of the glf as it appears on disk - no path.</li>
+<li>startdate - the startdate of this glf read from the glf config file. Date is in UTC.</li>
+<li>enddate - the enddate of this glf read from the glf config file. Date is in UTC.</li>
+<li>uid - a unique identifier for this glf - a UUID4 generated randomly on creation.</li>
+</ul>
+<h3 id="groups">groups</h3>
+<pre><code>ALTER TABLE public."groups" ADD uid uuid NOT NULL DEFAULT gen_random_uuid();
+ALTER TABLE public."groups" ADD gid int8 NOT NULL;
+ALTER TABLE public."groups" ADD timestart timestamptz NOT NULL;
+ALTER TABLE public."groups" ADD interact bool NOT NULL DEFAULT false;
+ALTER TABLE public."groups" ADD mammal int4 NOT NULL;
+ALTER TABLE public."groups" ADD fish int4 NOT NULL;
+ALTER TABLE public."groups" ADD bird int4 NOT NULL;
+ALTER TABLE public."groups" ADD sqlite varchar NOT NULL;
+ALTER TABLE public."groups" ADD code varchar NOT NULL;
+ALTER TABLE public."groups" ADD "comment" text NULL;
+ALTER TABLE public."groups" ADD timeend timestamptz NOT NULL;
+ALTER TABLE public."groups" ADD sqliteid int8 NOT NULL;
+ALTER TABLE public."groups" ADD split int4 NOT NULL DEFAULT 0;
+ALTER TABLE public."groups" ADD  huid varchar DEFAULT gen_random_uuid() NOT NULL;
+</code></pre>
+<ul>
+<li>uid - a unique identifier for this glf - a UUID4 generated randomly on creation.</li>
+<li>gid - the uid taken from the sqlite file. Not guaranteed to be unique.</li>
+<li>timestart - the starting time in UTC, taken from the SQLITE file, altered by the 'buffer' parameter from ingest.py.</li>
+<li>interact - was there an interaction? Human labelled annotation.</li>
+<li>mammal - mammal rating. Human labelled annotation.</li>
+<li>fish - fish rating. Human labelled annotation.</li>
+<li>bird - bird rating. Human labelled annotation.</li>
+<li>sqlite - the filename of the sqlite file this group was taken from.</li>
+<li>code - Human classification.</li>
+<li>comment - Human comment.</li>
+<li>timeend - the ending time in UTC, taken from the SQLITE file, altered by the 'buffer' parameter from ingest.py.</li>
+<li>sqliteid - the gid value taken from the sqlite file. Not guaranteed to be unique.</li>
+<li>split - if this group was originally part of another group, what order did it have? For example, if one group was split into 2, the second group would have a split value of one, whilst retaining the same gid, sqliteid and sqlite fields.</li>
+<li>huid - a <em>human readable</em> uid. This is a string of four words, combined with hyphens. Should be unique but isn't as guaranteed as the uuid. Useful for humans to refer to groups.</li>
+</ul>
+<p>This table has a primary key of uid.</p>
+<p>This table has a composite key of (gid, sqliteid, sqlite, split).</p>
+<h3 id="images">images</h3>
+<pre><code>ALTER TABLE public.images ADD filename varchar NOT NULL;
+ALTER TABLE public.images ADD uid uuid NOT NULL;
+ALTER TABLE public.images ADD hastrack bool NOT NULL DEFAULT false;
+ALTER TABLE public.images ADD glf varchar NOT NULL;
+ALTER TABLE public.images ADD "time" timestamptz NOT NULL;
+ALTER TABLE public.images ADD sonarid int4 NOT NULL;
+ALTER TABLE public.images ADD "range" float8 NOT NULL DEFAULT 55;
+</code></pre>
+<ul>
+<li>filename - the filename of this exported <a href="https://en.wikipedia.org/wiki/FITS">FITS</a> format image on disk.</li>
+<li>uid - a unique identifier for this glf - a UUID4 generated randomly on creation.</li>
+<li>hastrack - does a track appear in this image?</li>
+<li>glf - the glf file this image was taken from (TODO - replace with a foreign key into the GLF table)</li>
+<li>time - the time this image was taken in UTC. Extracted from the GLF file.</li>
+<li>sonarid - the ID of the sonar that took this image.</li>
+<li>range - the range setting of the sonar when this image was taken, in metres.</li>
+</ul>
+<p>Images have a primary key of uid.</p>
+<h3 id="pgdfs">pgdfs</h3>
+<pre><code>ALTER TABLE public.pgdfs ADD filename varchar NOT NULL;
+ALTER TABLE public.pgdfs ADD startdate timestamptz NOT NULL;
+ALTER TABLE public.pgdfs ADD enddate timestamptz NOT NULL;
+ALTER TABLE public.pgdfs ADD uid bigserial NOT NULL;
+</code></pre>
+<ul>
+<li>filename - the filename of the pgdf on disk.</li>
+<li>startdate - the starting date and time of the PGDF in UTC.</li>
+<li>enddate - the ending date and time of the PGDF in UTC.</li>
+<li>uid - a unique identifier for this glf - a bigint generated on creation. Should be replaced with a uuid.</li>
+</ul>
+<p>PGDFs has a primary key of uid.</p>
+<h3 id="points">points</h3>
+<pre><code>ALTER TABLE public.points ADD "time" timestamptz NOT NULL;
+ALTER TABLE public.points ADD sonarid int4 NOT NULL;
+ALTER TABLE public.points ADD minbearing float4 NOT NULL;
+ALTER TABLE public.points ADD maxbearing float4 NOT NULL;
+ALTER TABLE public.points ADD minrange float4 NOT NULL;
+ALTER TABLE public.points ADD maxrange float4 NOT NULL;
+ALTER TABLE public.points ADD uuid DEFAULT gen_random_uuid() NOT NULL,
+ALTER TABLE public.points ADD peakbearing float4 NOT NULL;
+ALTER TABLE public.points ADD peakrange float4 NOT NULL;
+ALTER TABLE public.points ADD "maxvalue" float4 NOT NULL;
+ALTER TABLE public.points ADD occupancy float4 NOT NULL;
+ALTER TABLE public.points ADD objsize float4 NOT NULL;
+ALTER TABLE public.points ADD track_id uuid NOT NULL;
+ALTER TABLE public.points ADD group_id uuid NOT NULL
+</code></pre>
+<ul>
+<li>time - the time this point appears in UTC.</li>
+<li>sonarid - the id of the sonar that took the image that this point appears in.</li>
+<li>minbearing - taken from the SQLITE file, in radians (minus is to the RIGHT of the fan image centreline).</li>
+<li>maxbearing - taken from the SQLITE file, in radians (minus is to the RIGHT of the fan image centreline).</li>
+<li>minrange - taken from the SQLITE file, in metres.</li>
+<li>maxrange - taken from the SQLITE file, in metres.</li>
+<li>uid - a unique identifier for this glf - a UUID4 generated randomly on creation.</li>
+<li>peakbearing - taken from the SQLITE file, in radians (minus is to the RIGHT of the fan image centreline).</li>
+<li>peakrange - taken from the SQLITE file, in metres.</li>
+<li>maxvalue - taken from the SQLITE file. Unknown units.</li>
+<li>occupancy - taken from the SQLITE file. Unknown units.</li>
+<li>objsize - taken from the SQLITE file. Unknown units.</li>
+<li>track_id - FOREIGN KEY into the tracks_group table. Which track does this point belong to?</li>
+<li>group_id - FOREIGN KEY into the groups table. Which group does this point belong to? Note this may differ from the group that the track that the point belongs to. The former is the original group BEFORE any splits took place. This is a quick solution and may be changed in future versions.</li>
+</ul>
+<p>There is a primary key on uid.</p>
+<h3 id="tracks_groups">tracks_groups</h3>
+<pre><code>ALTER TABLE public.tracks_groups ADD track_pam_id int8 NOT NULL;
+ALTER TABLE public.tracks_groups ADD group_id uuid NOT NULL;
+ALTER TABLE public.tracks_groups ADD binfile varchar NOT NULL;
+ALTER TABLE public.tracks_groups ADD track_id uuid NOT NULL DEFAULT gen_random_uuid();
+</code></pre>
+<ul>
+<li>track_pam_id - the uid taken from the sqlite file. Not guaranteed to be unique.</li>
+<li>group_id - FOREIGN KEY into the groups table. Which group does this track belong to?</li>
+<li>binfile - the PGDF file this track was taken from (TODO - replace with foreign key into PGDF table).</li>
+<li>uid - a unique identifier for this glf - a UUID4 generated randomly on creation.</li>
+</ul>
+<p>uid is the primary key.</p>
+<p>The database consists of a number of indexes on various tables to increase performance.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../explanation/" class="btn btn-neutral float-left" title="Explanation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../explanation/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
