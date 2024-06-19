@@ -73,13 +73,19 @@ Depending on the size of the fan images you create, it can be a good idea to use
 
 ## Tests
 
+The tests assume you have a working PosgreSQL on the test machine. This will need to be installed first, before any tests can be run. Once this is setup on your test machine, the pytest will create a temporary database called *testseals*. Make sure this database does not already exist.
+
+The tests also assume you have a user called *postgres* with the password *postgres* within your PostgreSQL setup and that this user can create databases. If this is not the case (which is quite likely), you can set the username and password as environment variables:
+
+    export SEALHITS_TESTDATA_PGUSER="jam"
+    export SEALHITS_TESTDATA_PGpass="toast"
+
 To perform the tests, use pytest. The paths are set with the pytest.ini file.
 
     pytest
 
 During the first ever run, pytest will attempt to download the test data (Currently located at [https://gitlab.st-andrews.ac.uk/biology/smru/bjb8/sealhits_testdata](https://gitlab.st-andrews.ac.uk/biology/smru/bjb8/sealhits_testdata)). This dataset is quite large so it might take a while to obtain.
 
-The tests assume you have a working PosgreSQL on the test machine. This will need to be installed first, before any tests can be run. Once this is setup on your test machine, the pytest will create a temporary database called *testseals*. Make sure this database does not already exist.
 
 ## Docs
 

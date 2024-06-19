@@ -33,12 +33,21 @@ def get_data(request):
   
     pg_conn = None
 
+    pg_username = os.environ['SEALHITS_TESTDATA_PGUSER']
+    pg_password = os.environ['SEALHITS_TESTDATA_PGPASS']
+
+    if pg_username is None or pg_username == "":
+        pg_username = "postgres"
+    
+    if pg_password is None or pg_password == "":
+        pg_password = "postgres"
+
     try:
         # In PostgreSQL, default username is 'postgres' and password is 'postgres'.
         # And also there is a default database exist named as 'postgres'.
         # Default host is 'localhost' or '127.0.0.1'
         # And default port is '54322'.
-        pg_conn = psycopg2.connect("user='postgres' host='localhost' password='postgres' port='5432'")
+        pg_conn = psycopg2.connect("user='" + pg_username + "' host='localhost' password='" + pg_password + "' port='5432'")
         print('Database connected.')
 
     except Exception as e:
@@ -97,7 +106,7 @@ def get_data(request):
             # Now yield the stuff we need, the data directory and the two databases
         yield (test_data_dir, db, db_blank)
      
-    connection = psycopg2.connect("user='postgres' host='localhost' password='postgres' port='5432'")
+    connection = psycopg2.connect("user='" + pg_username + "' host='localhost' password='" + pg_password + "' port='5432'")
     connection.autocommit = True
     cur = connection.cursor()
 
