@@ -20,11 +20,3 @@ The '-b' switch specifies the length of the buffer in seconds. This amount of im
     python ingest.py -h
 
 This command can take up to several days to complete depending on the number and size of the various groups. Multiple ingest commands can be run at once. Depending on the disks, network speed or other restrictions, you may or may not be able to run a large number of ingests at once.
-
-## Generating a dataset
-
-Once the ingest is complete, you can generate a dataset. Let's generate an Rdata dataset. This consists of a number of images, each a crop of the original sonar image and the metadata for each crop.
-
-    python tordata.py -o /path/to/output/dir -c /path/to/cache -i /path/to/fits/dir -e -d <database name>
-
-The cache directory saves the fan distorted images for use later and is optional. The '-e' switch interpolates and cleans the original track.
