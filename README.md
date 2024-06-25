@@ -78,13 +78,13 @@ The tests assume you have a working PosgreSQL on the test machine. This will nee
 The tests also assume you have a user called *postgres* with the password *postgres* within your PostgreSQL setup and that this user can create databases. If this is not the case (which is quite likely), you can set the username and password as environment variables:
 
     export SEALHITS_TESTDATA_PGUSER="jam"
-    export SEALHITS_TESTDATA_PGpass="toast"
+    export SEALHITS_TESTDATA_PGPASS="toast"
 
 To perform the tests, use pytest. The paths are set with the pytest.ini file.
 
     pytest
 
-During the first ever run, pytest will attempt to download the test data (Currently located at [https://gitlab.st-andrews.ac.uk/biology/smru/bjb8/sealhits_testdata](https://gitlab.st-andrews.ac.uk/biology/smru/bjb8/sealhits_testdata)). This dataset is quite large so it might take a while to obtain.
+During the first ever run, pytest will attempt to download the test data (Currently located at [https://zenodo.org/records/12518315](https://zenodo.org/records/12518315). This dataset is quite large - 1.7GB - so it might take a while to obtain. It will be unzipped at the root of this repository at sealhits_testdata. This test data is also used for the [CrabSeal](https://github.com/OniDaito/crabseal.git) and [OceanMotion](https://github.com/OniDaito/oceanmotion) projects.
 
 
 ## Docs
@@ -96,12 +96,4 @@ Documentation is built using the program [mkdocs](https://www.mkdocs.org/). It s
 * `mkdocs serve` - Start the live-reloading docs server.
 * `mkdocs build` - Build the documentation site.
 
-## Useful resources
-
-Some useful resources for this particular project:
-
-* [FITS handling with Astropy](https://docs.astropy.org/en/stable/io/fits/index.html)
-* [SQLAlchemy](https://docs.sqlalchemy.org/en/20/index.html)
-* [Read the Docs with MkDocs](https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html)
-* [MkDocs](https://www.mkdocs.org/)
   

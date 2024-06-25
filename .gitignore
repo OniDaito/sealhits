@@ -8,3 +8,4 @@ results/*.fits
 .ruff_cache
 .vscode
 venv
+sealhits_testdata
